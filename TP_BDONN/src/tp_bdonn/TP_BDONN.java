@@ -27,7 +27,8 @@ public class TP_BDONN {
             Connection con = DriverManager.getConnection(dbURL, user, password);
             
             // Requête A
-            FlotteCamion.callFlotte(con);
+            System.out.println("Flotte de camions de l'entreprise :");
+            FlotteCamion.callFlotte(con, "%");
             
             // Requête B
             LivraisonCamion.callLivraison(con);
@@ -39,12 +40,14 @@ public class TP_BDONN {
             CommandeNonPrevues.callCommandeNonPrevue(con);
             
             // Requête E
-            
+            //FlotteCamion.commandesPartiellementLivrees(con);
             
             // Requête F
             CommandeLeRoch.callLeRoch(con);
             
             // Requête G
+            FlotteCamion.creationChauffeur(con, "DE RIV", "Gerald");
+            FlotteCamion.attributionCamion(con, "DE RIV", "Gerald", "AM-654-TU");
 
             con.close();
             
