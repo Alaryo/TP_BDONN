@@ -35,8 +35,8 @@ public class TP_BDONN {
             // Requête C
             FlotteCamion.callFlotteReserve(con);
             
-            // Requête D
-            
+            // Requête D            
+            CommandeNonPrevues.callCommandeNonPrevue(con);
             
             // Requête E
             
