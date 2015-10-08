@@ -30,7 +30,7 @@ public class TP_BDONN {
             FlotteCamion.callFlotte(con);
             
             // Requête B
-            
+            LivraisonCamion.callLivraison(con);
             
             // Requête C
             FlotteCamion.callFlotteReserve(con);
