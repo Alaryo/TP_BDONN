@@ -7,7 +7,7 @@ package tp_bdonn;
 
 /**
  *
- * @author victo
+ * @author Hicham DAHER et Victor ENAUD
  */
 import java.sql.*;
 
@@ -28,26 +28,26 @@ public class TP_BDONN {
             
             // Requête A
             System.out.println("Flotte de camions de l'entreprise :");
-            FlotteCamion.callFlotte(con, "%");
+            Requetes.callFlotte(con, "%");
             
             // Requête B
-            LivraisonCamion.callLivraison(con);
+            Requetes.callLivraison(con, "AC-543-AG", "2015-11-15");
             
             // Requête C
-            FlotteCamion.callFlotteReserve(con);
+            Requetes.callFlotteReserve(con);
             
             // Requête D            
-            CommandeNonPrevues.callCommandeNonPrevue(con);
+            Requetes.commandeNonPrevue(con);
             
             // Requête E
-            //FlotteCamion.commandesPartiellementLivrees(con);
+            Requetes.commandesPartiellementLivrees(con);
             
             // Requête F
-            CommandeLeRoch.callLeRoch(con);
+            Requetes.commandeChauffeur(con, "LEROC'H", "Henry", true);
             
             // Requête G
-            FlotteCamion.creationChauffeur(con, "DE RIV", "Gerald");
-            FlotteCamion.attributionCamion(con, "DE RIV", "Gerald", "AM-654-TU");
+            //Requetes.creationChauffeur(con, "DE RIV", "Gerald");
+            //Requetes.attributionCamion(con, "DE RIV", "Gerald", "AM-654-TU");
 
             con.close();
             
