@@ -10,8 +10,6 @@ package tp_bdonn;
  * @author victo
  */
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TP_BDONN {
 
@@ -28,7 +26,25 @@ public class TP_BDONN {
 
             Connection con = DriverManager.getConnection(dbURL, user, password);
             
+            // Requête A
             FlotteCamion.callFlotte(con);
+            
+            // Requête B
+            
+            
+            // Requête C
+            
+            
+            // Requête D
+            
+            
+            // Requête E
+            
+            
+            // Requête F
+            
+            
+            // Requête G
 
             con.close();
             
