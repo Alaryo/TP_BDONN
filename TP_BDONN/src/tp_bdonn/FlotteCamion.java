@@ -23,19 +23,45 @@ public class FlotteCamion {
             stmt.setString(1, "%");
             ResultSet res = stmt.executeQuery();
 
+            System.out.println("Flotte de camions de l'entreprise :");
+
             while (res.next()) {
                 if (res.getString("chauffeur_nom") == null) {
-                    System.out.println("Info : "
-                            + res.getString("immatriculation")
+                    System.out.println(res.getString("immatriculation")
                             + " n'a pas de chauffeur attitré");
                 } else {
-                    System.out.println("Info : " + res.getString("immatriculation") + " attitré à "
+                    System.out.println(res.getString("immatriculation") + " attitré à "
                             + res.getString("chauffeur_nom") + " " + res.getString("chauffeur_prenom"));
                 }
             }
+            System.out.println("");
             stmt.close();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
+    }
+
+    public static void callFlotteReserve(Connection con) {
+        try {
+            String query = "SELECT Immatriculation FROM Camion WHERE Chauffeur_ID IS NULL";
+
+            PreparedStatement stmt = con.prepareStatement(query);
+            //stmt.setInt(1, null);
+
+            ResultSet res = stmt.executeQuery();
+
+            System.out.println("Camions en réserve :");
+
+            while (res.next()) {
+                System.out.println(res.getString("immatriculation"));
+
+            }
+            stmt.close();
+
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        System.out.println("");
+
     }
 }
