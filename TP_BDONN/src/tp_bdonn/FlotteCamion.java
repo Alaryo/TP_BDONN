@@ -7,7 +7,6 @@ package tp_bdonn;
 
 import java.sql.*;
 
-
 /**
  *
  * @author victo
@@ -17,7 +16,7 @@ public class FlotteCamion {
     public static void callFlotte(Connection con) {
         try {
             String query = "SELECT Camion.Immatriculation,Chauffeur.Chauffeur_Nom, Chauffeur.Chauffeur_Prenom"
-                    + " FROM Camion NATURAL FULL OUTER JOIN Chauffeur WHERE chauffeur_nom LIKE ?";
+                    + " FROM Camion NATURAL FULL OUTER JOIN Chauffeur WHERE camion.Immatriculation LIKE ? ORDER BY Chauffeur.Chauffeur_Prenom";
 
             PreparedStatement stmt = con.prepareStatement(query);
 
@@ -25,9 +24,14 @@ public class FlotteCamion {
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-
-                System.out.println("Info : " + res.getString("immatriculation") + " affilié à "
-                        + res.getString("chauffeur_nom") + " " + res.getString("chauffeur_prenom"));
+                if (res.getString("chauffeur_nom") == null) {
+                    System.out.println("Info : "
+                            + res.getString("immatriculation")
+                            + " n'a pas de chauffeur attitré");
+                } else {
+                    System.out.println("Info : " + res.getString("immatriculation") + " attitré à "
+                            + res.getString("chauffeur_nom") + " " + res.getString("chauffeur_prenom"));
+                }
             }
             stmt.close();
         } catch (SQLException e) {
