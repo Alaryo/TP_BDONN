@@ -17,7 +17,7 @@ public class FlotteCamion {
     public static void callFlotte(Connection con) {
         try {
             String query = "SELECT Camion.Immatriculation,Chauffeur.Chauffeur_Nom, Chauffeur.Chauffeur_Prenom"
-                    + "     FROM Camion NATURAL FULL OUTER JOIN Chauffeur WHERE ?";
+                    + " FROM Camion NATURAL FULL OUTER JOIN Chauffeur WHERE chauffeur_nom LIKE ?";
 
             PreparedStatement stmt = con.prepareStatement(query);
 
