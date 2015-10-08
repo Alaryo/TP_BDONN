@@ -42,7 +42,7 @@ public class TP_BDONN {
             
             
             // Requête F
-            
+            CommandeLeRoch.callLeRoch(con);
             
             // Requête G
 
