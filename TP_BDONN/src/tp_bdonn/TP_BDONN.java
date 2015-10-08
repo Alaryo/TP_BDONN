@@ -40,7 +40,7 @@ public class TP_BDONN {
             Requetes.commandeNonPrevue(con);
             
             // Requête E
-            Requetes.commandesPartiellementLivrees(con);
+            //Requetes.commandesPartiellementLivrees(con);
             
             // Requête F
             Requetes.commandeChauffeur(con, "LEROC'H", "Henry", true);

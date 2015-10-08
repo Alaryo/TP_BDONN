@@ -6,6 +6,8 @@
 package tp_bdonn;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -239,32 +241,55 @@ public class Requetes {
     
     public static void commandesPartiellementLivrees(Connection con) {
         try {
-            String query = "SELECT Entreprise.Entreprise_Nom, Produit.Produit_Nom, CommandeContient.Quantite, CommandeContient.Quantite_Unite, Commande.Commande_Date, Entrepot.Entrepot_Adresse,Entrepot.Entrepot_Ville"
+            String query1 = "SELECT Produit.Produit_ID, Livraison.Livraison_ID, Entreprise.Entreprise_Nom, Produit.Produit_Nom, CommandeContient.Quantite, CommandeContient.Quantite_Unite, Commande.Commande_Date, Entrepot.Entrepot_Adresse,Entrepot.Entrepot_Ville"
                     + "               FROM Commande"
                     + "		NATURAL FULL OUTER JOIN Livraison"
                     + "		INNER JOIN Entreprise ON (Entreprise.Entreprise_ID = Commande.Entreprise_ID)"
                     + "		INNER JOIN CommandeContient ON (CommandeContient.Commande_ID = Commande.Commande_ID)"
                     + "		INNER JOIN Produit ON (Produit.Produit_ID = CommandeContient.Produit_ID)"
                     + "		INNER JOIN Entrepot ON (Entrepot.Entrepot_ID = Commande.Entrepot_ID)"
-                    + "         INNER JOIN Palette ON (Palette.Livraison_ID = Livraison.Livraison_ID)"
-                    + "               ;";
+                    + "         INNER JOIN Palette ON (Palette.Livraison_ID = Livraison.Livraison_ID)";
 
-            PreparedStatement stmt = con.prepareStatement(query);
-
-            ResultSet res = stmt.executeQuery();
-
-            if (!res.isBeforeFirst()) {
-                System.out.println("Toutes les commandes ont une livraison prévue");
-            } else {
-                while (res.next()) {
-                    System.out.println("Les commandes suivantes n'ont pas de livraison prévue :");
-                    System.out.println(res.getString("Entreprise_Nom") + " a commandé "
-                            + res.getString("Quantite") + res.getString("Quantite_Unite") + " de " + res.getString("Produit_nom")
-                            + " le " + res.getString("Commande_Date") + " à livrer au "
-                            + res.getString("Entrepot_Adresse") + " à " + res.getString("Entrepot_Ville"));
+            String query2 = "SELECT Palette.Livraison_ID, Palette.Produit_ID, sum(Palette.Palette_Poids)"
+                    + "         FROM Palette GROUP BY Palette.Livraison_ID, Palette.Produit_ID";
+            
+            PreparedStatement stmt1 = con.prepareStatement(query1);
+            PreparedStatement stmt2 = con.prepareStatement(query2);
+            
+            ResultSet res1 = stmt1.executeQuery();
+            ResultSet res2 = stmt2.executeQuery();
+            
+            while (res1.next()){
+                boolean egal = true;
+                while(res2.next()){
+                    if(res1.getInt("Livraison_ID") == res2.getInt("Livraison_ID")){
+                        System.out.println("Test 1");
+                        if(res1.getInt("Produit_ID") == res2.getInt("Produit_ID")){
+                            System.out.println("Test 2");
+                            if(res1.getInt("Quantite") == res2.getInt("sum")){
+                                System.out.println("Test 3");
+                                System.out.println(res1.getInt("Quantite"));
+                                System.out.println(res2.getInt("sum"));
+                            }
+                        }
+                    }
                 }
+                res2.isBeforeFirst();
             }
-            stmt.close();
+            
+//            if (!res.isBeforeFirst()) {
+//                System.out.println("Toutes les commandes ont une livraison prévue");
+//            } else {
+//                while (res.next()) {
+//                    System.out.println("Les commandes suivantes n'ont pas de livraison prévue :");
+//                    System.out.println(res.getString("Entreprise_Nom") + " a commandé "
+//                            + res.getString("Quantite") + res.getString("Quantite_Unite") + " de " + res.getString("Produit_nom")
+//                            + " le " + res.getString("Commande_Date") + " à livrer au "
+//                            + res.getString("Entrepot_Adresse") + " à " + res.getString("Entrepot_Ville"));
+//                }
+//            }
+            stmt1.close();
+            stmt2.close();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
