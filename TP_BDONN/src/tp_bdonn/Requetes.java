@@ -238,7 +238,7 @@ public class Requetes {
         }
         System.out.println("");
     }
-    
+
     public static void commandesPartiellementLivrees(Connection con) {
         try {
             String query1 = "SELECT Produit.Produit_ID, Livraison.Livraison_ID, Entreprise.Entreprise_Nom, Produit.Produit_Nom, CommandeContient.Quantite, CommandeContient.Quantite_Unite, Commande.Commande_Date, Entrepot.Entrepot_Adresse,Entrepot.Entrepot_Ville"
@@ -247,36 +247,47 @@ public class Requetes {
                     + "		INNER JOIN Entreprise ON (Entreprise.Entreprise_ID = Commande.Entreprise_ID)"
                     + "		INNER JOIN CommandeContient ON (CommandeContient.Commande_ID = Commande.Commande_ID)"
                     + "		INNER JOIN Produit ON (Produit.Produit_ID = CommandeContient.Produit_ID)"
-                    + "		INNER JOIN Entrepot ON (Entrepot.Entrepot_ID = Commande.Entrepot_ID)"
-                    + "         INNER JOIN Palette ON (Palette.Livraison_ID = Livraison.Livraison_ID)";
+                    + "		INNER JOIN Entrepot ON (Entrepot.Entrepot_ID = Commande.Entrepot_ID)";
 
             String query2 = "SELECT Palette.Livraison_ID, Palette.Produit_ID, sum(Palette.Palette_Poids)"
                     + "         FROM Palette GROUP BY Palette.Livraison_ID, Palette.Produit_ID";
-            
+
             PreparedStatement stmt1 = con.prepareStatement(query1);
-            PreparedStatement stmt2 = con.prepareStatement(query2);
-            
+            PreparedStatement stmt2 = con.prepareStatement(query2, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
             ResultSet res1 = stmt1.executeQuery();
             ResultSet res2 = stmt2.executeQuery();
-            
-            while (res1.next()){
+
+            while (res1.next()) {
                 boolean egal = true;
-                while(res2.next()){
-                    if(res1.getInt("Livraison_ID") == res2.getInt("Livraison_ID")){
-                        System.out.println("Test 1");
-                        if(res1.getInt("Produit_ID") == res2.getInt("Produit_ID")){
-                            System.out.println("Test 2");
-                            if(res1.getInt("Quantite") == res2.getInt("sum")){
-                                System.out.println("Test 3");
-                                System.out.println(res1.getInt("Quantite"));
-                                System.out.println(res2.getInt("sum"));
+
+//                System.out.println("Test 0");
+//                System.out.println(res1.getInt("Quantite"));
+                while (res2.next()) {
+//                    System.out.println("Test 0a");
+//                    System.out.println(res1.getInt("Quantite"));
+//                    System.out.println("Test 0b");
+//                    System.out.println(res2.getInt("sum"));
+                    if (res1.getInt("Livraison_ID") == res2.getInt("Livraison_ID")) {
+//                        System.out.println("Test 1");
+//                        System.out.println(res2.getInt("sum"));
+                        if (res1.getInt("Produit_ID") == res2.getInt("Produit_ID")) {
+//                            System.out.println("Test 2");
+                            if (res1.getInt("Quantite") != res2.getInt("sum")) {
+                                System.out.println(res1.getString("Entreprise_Nom") + " a commandé "
+                                        + res1.getString("Quantite") + res1.getString("Quantite_Unite") + " de " + res1.getString("Produit_nom")
+                                        + " le " + res1.getString("Commande_Date") + " et n'a été livré que de " + res2.getInt("sum") + " kg");
+
+//                                System.out.println("Test 3");
+//                                System.out.println(res1.getInt("Quantite"));
+//                                System.out.println(res2.getInt("sum"));
                             }
                         }
                     }
                 }
-                res2.isBeforeFirst();
+                res2.beforeFirst();
             }
-            
+
 //            if (!res.isBeforeFirst()) {
 //                System.out.println("Toutes les commandes ont une livraison prévue");
 //            } else {
