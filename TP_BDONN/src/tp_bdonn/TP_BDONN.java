@@ -18,6 +18,7 @@ public class TP_BDONN {
      */
     public static void main(String[] args) {
         try {
+            // TEST PIERRE
             Class.forName("org.postgresql.Driver");
 
             String dbURL = "jdbc:postgresql://localhost:5432/TP_BDONN";
